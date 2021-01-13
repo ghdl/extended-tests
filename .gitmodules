@@ -1,0 +1,6 @@
+[submodule "verification/OSVVM/OsvvmLibraries"]
+	path = verification/OSVVM/OsvvmLibraries
+	url = https://github.com/osvvm/OsvvmLibraries
+[submodule "verification/UVVM/uvvm"]
+	path = verification/UVVM/uvvm
+	url = https://github.com/uvvm/uvvm
