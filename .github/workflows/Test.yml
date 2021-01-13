@@ -15,16 +15,27 @@ jobs:
 
   lin-docker:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        pkg: [
+          'mcode',
+          'llvm',
+          'gcc',
+        ]
+    name: '🛳️ Docker · ghdl/vunit:${{ matrix.pkg }}-master'
     env:
       DOCKER_BUILDKIT: 1
     steps:
 
-    - uses: actions/checkout@v2
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
 
     - name: Build test image
       run: |
         docker build -t ghdl/test:extended - <<EOF
-        FROM ghdl/vunit:mcode-master
+        FROM ghdl/vunit:${{ matrix.pkg }}-master
         RUN apt update -qq \
          && apt install -y python3-pip \
          && python3 -m pip install pytest
@@ -35,15 +46,19 @@ jobs:
 
   lin-setup:
     runs-on: ubuntu-latest
+    name: '🐧 Ubuntu · setup-ghdl-ci'
     steps:
 
-    - uses: actions/checkout@v2
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
 
-    - uses: ghdl/setup-ghdl-ci@master
+    - name: '⚙️ setup-ghdl-ci'
+      uses: ghdl/setup-ghdl-ci@master
       with:
         backend: llvm
 
-    - uses: actions/setup-python@v2
+    - name: '🐍 Setup Python'
+      uses: actions/setup-python@v2
       with:
         python-version: 3.8
 
@@ -71,7 +86,8 @@ jobs:
         shell: msys2 {0}
     steps:
 
-    - uses: msys2/setup-msys2@v2
+    - name: '${{ matrix.icon }} Setup MSYS2'
+      uses: msys2/setup-msys2@v2
       with:
         msystem: ${{ matrix.installs }}
         update: true
@@ -79,9 +95,11 @@ jobs:
           mingw-w64-${{ matrix.arch }}-python-pip
           mingw-w64-${{ matrix.arch }}-python-pytest
 
-    - uses: actions/checkout@v2
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
 
-    - uses: ghdl/setup-ghdl-ci@master
+    - name: '⚙️ setup-ghdl-ci'
+      uses: ghdl/setup-ghdl-ci@master
       with:
         backend: ${{ matrix.pkg }}
 
