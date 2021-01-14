@@ -104,3 +104,48 @@ jobs:
         backend: ${{ matrix.pkg }}
 
     - run: python -m pytest -v -s -ra test.py --color=yes
+
+
+  win-OSVVM:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        include: [
+          {icon: '🟦', installs: 'MINGW32', arch: i686,   pkg: 'mcode' },
+          #{icon: '🟦', installs: "MINGW32", arch: i686,   pkg: "llvm"  }, ! Not yet functional
+          #{icon: '🟪', installs: "MINGW64", arch: x86_64, pkg: "mcode" }, ! mcode is not yet supported on win64
+          {icon: '🟪', installs: 'MINGW64', arch: x86_64, pkg: 'llvm'  },
+        ]
+    name: '${{ matrix.icon }} OSVVM · ${{ matrix.installs }} · ${{ matrix.pkg }}'
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+
+    - name: '${{ matrix.icon }} Setup MSYS2'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.installs }}
+        update: true
+        install: git
+
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+
+    - name: '⚙️ setup-ghdl-ci'
+      uses: ghdl/setup-ghdl-ci@master
+      with:
+        backend: ${{ matrix.pkg }}
+
+    - name: Prepare
+      run: |
+        git submodule update --init --recursive verification/OSVVM/OsvvmLibraries 
+        echo $(cygpath -w /) >> MSYS2_PATH.env
+
+    - name: Compile OSVVM
+      shell: powershell
+      run: |
+        $env:MSYS2_MINGW_PATH = (Get-Content MSYS2_PATH.env) + '${{ matrix.installs }}'
+        & $env:MSYS2_MINGW_PATH\lib\ghdl\vendors\compile-osvvm.ps1 -All -Source verification\OSVVM\OsvvmLibraries -Output precompiled -GHDL $env:MSYS2_MINGW_PATH\bin\ghdl.exe
