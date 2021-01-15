@@ -144,12 +144,8 @@ jobs:
         git submodule update --init --recursive verification/OSVVM/OsvvmLibraries 
         echo $(cygpath -w /) >> MSYS2_PATH.env
 
-        # FIXME Should be removed after https://github.com/ghdl/ghdl/pull/1594 is merged
-        git clone -b paebbels/precompile/windows https://github.com/Paebbels/ghdl
-        cp -vr ghdl/libraries/vendors/* /${{ matrix.installs }}/lib/ghdl/vendors/
-
     - name: Compile OSVVM
       shell: powershell
       run: |
         $env:MSYS2_MINGW_PATH = (Get-Content MSYS2_PATH.env) + '${{ matrix.installs }}'
-        & $env:MSYS2_MINGW_PATH\lib\ghdl\vendors\compile-osvvm.ps1 -All -Source verification\OSVVM\OsvvmLibraries -Output precompiled -GHDL $env:MSYS2_MINGW_PATH\bin\ghdl.exe
+        & $env:MSYS2_MINGW_PATH\lib\ghdl\vendors\compile-osvvm.ps1 -OSVVM -OSVVM_VIP_UART -Source verification\OSVVM\OsvvmLibraries -Output precompiled -GHDL $env:MSYS2_MINGW_PATH\bin\ghdl.exe
