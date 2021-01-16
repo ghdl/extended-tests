@@ -139,13 +139,8 @@ jobs:
       with:
         backend: ${{ matrix.pkg }}
 
-    - name: Prepare
-      run: |
-        git submodule update --init --recursive verification/OSVVM/OsvvmLibraries 
-        echo $(cygpath -w /) >> MSYS2_PATH.env
-
     - name: Compile OSVVM
       shell: powershell
       run: |
-        $env:MSYS2_MINGW_PATH = (Get-Content MSYS2_PATH.env) + '${{ matrix.installs }}'
-        & $env:MSYS2_MINGW_PATH\lib\ghdl\vendors\compile-osvvm.ps1 -OSVVM -OSVVM_VIP_UART -Source verification\OSVVM\OsvvmLibraries -Output precompiled -GHDL $env:MSYS2_MINGW_PATH\bin\ghdl.exe
+        git submodule update --init --recursive verification\OSVVM\OsvvmLibraries
+        & $env:GHDL_LIBS\vendors\compile-osvvm.ps1 -OSVVM -OSVVM_VIP_UART -Source verification\OSVVM\OsvvmLibraries -Output precompiled
