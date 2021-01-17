@@ -138,7 +138,7 @@ jobs:
     - name: '🧰 Checkout'
       uses: actions/checkout@v2
 
-    - name: '⚙️ setup-ghdl-ci'
+    - name: '⚙️ Setup GHDL'
       uses: ghdl/setup-ghdl-ci@master
       with:
         backend: ${{ matrix.sys.pkg }}
