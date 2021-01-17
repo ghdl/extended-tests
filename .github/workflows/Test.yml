@@ -106,28 +106,32 @@ jobs:
 #    - run: python -m pytest -v -s -ra test.py --color=yes
 
 
-  win-OSVVM:
+  win-verification:
     runs-on: windows-latest
     strategy:
       fail-fast: false
       max-parallel: 8
       matrix:
-        include: [
+        sys: [
           {icon: '🟦', installs: 'MINGW32', arch: i686,   pkg: 'mcode' },
           #{icon: '🟦', installs: "MINGW32", arch: i686,   pkg: "llvm"  }, ! Not yet functional
           #{icon: '🟪', installs: "MINGW64", arch: x86_64, pkg: "mcode" }, ! mcode is not yet supported on win64
           {icon: '🟪', installs: 'MINGW64', arch: x86_64, pkg: 'llvm'  },
         ]
-    name: '${{ matrix.icon }} OSVVM · ${{ matrix.installs }} · ${{ matrix.pkg }}'
+        project: [
+          OSVVM,
+          UVVM
+        ]
+    name: '${{ matrix.sys.icon }} ${{ matrix.project }} · ${{ matrix.sys.installs }} ${{ matrix.sys.pkg }}'
     defaults:
       run:
         shell: msys2 {0}
     steps:
 
-    - name: '${{ matrix.icon }} Setup MSYS2'
+    - name: '${{ matrix.sys.icon }} Setup MSYS2'
       uses: msys2/setup-msys2@v2
       with:
-        msystem: ${{ matrix.installs }}
+        msystem: ${{ matrix.sys.installs }}
         update: true
         install: git
 
@@ -137,10 +141,8 @@ jobs:
     - name: '⚙️ setup-ghdl-ci'
       uses: ghdl/setup-ghdl-ci@master
       with:
-        backend: ${{ matrix.pkg }}
+        backend: ${{ matrix.sys.pkg }}
 
-    - name: Compile OSVVM
+    - name: Compile ${{ matrix.project }}
       shell: powershell
-      run: |
-        git submodule update --init --recursive verification\OSVVM\OsvvmLibraries
-        & $env:GHDL_LIBS\vendors\compile-osvvm.ps1 -OSVVM -OSVVM_VIP_UART -Source verification\OSVVM\OsvvmLibraries -Output precompiled
+      run: verification\${{ matrix.project }}\run.ps1
