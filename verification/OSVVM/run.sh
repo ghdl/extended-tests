@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
-echo 'Test not implemented yet!'
+git submodule update --init --recursive verification/OSVVM/OsvvmLibraries
+$GHDL_PREFIX/vendors/compile-osvvm.sh --osvvm --source $(dirname $0)/OsvvmLibraries/osvvm --output precompiled

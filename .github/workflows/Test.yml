@@ -122,7 +122,11 @@ jobs:
           OSVVM,
           UVVM
         ]
-    name: '${{ matrix.sys.icon }} ${{ matrix.project }} · ${{ matrix.sys.installs }} ${{ matrix.sys.pkg }}'
+        shell: [
+          msys2,
+          psh
+        ]
+    name: '${{ matrix.sys.icon }} ${{ matrix.project }} · ${{ matrix.shell }} · ${{ matrix.sys.installs }} ${{ matrix.sys.pkg }}'
     defaults:
       run:
         shell: msys2 {0}
@@ -143,6 +147,11 @@ jobs:
       with:
         backend: ${{ matrix.sys.pkg }}
 
+    - name: '${{ matrix.sys.icon }} Compile ${{ matrix.project }}'
+      if: matrix.shell == 'msys2'
+      run: ./verification/${{ matrix.project }}/run.sh
+
     - name: Compile ${{ matrix.project }}
+      if: matrix.shell == 'psh'
       shell: powershell
       run: verification\${{ matrix.project }}\run.ps1
