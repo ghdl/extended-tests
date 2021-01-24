@@ -89,5 +89,5 @@ jobs:
 
     - name: Compile ${{ matrix.project }}
       if: matrix.shell == 'psh'
-      shell: powershell
+      shell: pwsh
       run: verification\${{ matrix.project }}\run.ps1
