@@ -91,3 +91,59 @@ jobs:
       if: matrix.shell == 'psh'
       shell: pwsh
       run: verification\${{ matrix.project }}\run.ps1
+
+
+  DOM:
+    runs-on: ubuntu-latest
+    name: '🐧 ${{ matrix.project }} · DOM'
+    steps:
+
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: '⚙️ Setup GHDL'
+      uses: ghdl/setup-ghdl-ci@master
+      with:
+        backend: ${{ matrix.backend }}
+
+    - name: '🐍 Setup Python'
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: '🐍 Install dependencies'
+      run: |
+        pip3 install pytest pytest-reporter pytest-reporter-html1 pytest-xdist
+        pip3 install git+https://github.com/ghdl/ghdl.git@$(ghdl version hash)
+
+    - name: '📦 Clone repositories to be analysed'
+      run: |
+        git clone https://github.com/ghdl/ghdl
+        git clone https://github.com/VUnit/vunit
+        git clone https://github.com/VLSI-EDA/PoC
+
+    - name: '🚧 Run pytest'
+      run: pytest -n $(nproc) --template=html1/index.html --report=report.html TestDOM.py
+
+    - name: '📤 Upload artifact: report.html'
+      if: github.event_name != 'pull_request'
+      uses: actions/upload-artifact@v2
+      with:
+        path: report.html
+
+    - name: '📓 Publish report to gh-pages'
+      if: github.event_name != 'pull_request'
+      run: |
+        mkdir public
+        cd public
+        git init
+        cp ../.git/config ./.git/config
+        touch .nojekyll
+        cp ../report.html ./index.html
+        git add .
+        git config --local user.email "push@gha"
+        git config --local user.name "GHA"
+        git commit -am "update ${{ github.sha }}"
+        git push -u origin +HEAD:gh-pages

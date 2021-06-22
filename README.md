@@ -1,7 +1,18 @@
+
+<p align="center">
+  <a title="Documentation" href="https://ghdl.github.io/extended-tests"><img src="https://img.shields.io/website.svg?label=ghdl.github.io%2Fextended-tests&longCache=true&style=flat-square&url=http%3A%2F%2Fghdl.github.io%2Fextended-tests%2Findex.html&logo=GitHub"></a><!--
+  -->
+  <a title="Join the chat at https://gitter.im/ghdl1/Lobby" href="https://gitter.im/ghdl1/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://img.shields.io/badge/Chat-on%20gitter-4db797.svg?longCache=true&style=flat-square&logo=gitter&logoColor=e8ecef"></a><!--
+  -->
+  <a title="'Test' workflow Status" href="https://github.com/ghdl/extended-tests/actions?query=workflow%3ATest"><img alt="'Test' workflow Status" src="https://img.shields.io/github/workflow/status/ghdl/extended-tests/Test/main?longCache=true&style=flat-square&label=Test&logo=github%20actions&logoColor=fff"></a><!--
+  -->
+</p>
+
 # Extended tests for GHDL
 
 This repository contains tests, examples and third-party projects to be tested on GitHub Actions workflows, using bleeding-edge realeases of [GHDL](https://github.com/ghdl/ghdl) ([nightly](https://github.com/ghdl/ghdl/releases/tag/nightly) assets through Action [setup-ghdl-ci](https://github.com/ghdl/setup-ghdl-ci), and/or [containers](https://github.com/ghdl/docker)).
 
+- `ghdl-dom`: GHDL, PoC, OSVVM, UVVM, VUnit.
 - Simulation
 - Verification
   - [OSVVM](https://osvvm.org/)
