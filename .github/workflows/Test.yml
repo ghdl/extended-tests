@@ -120,11 +120,14 @@ jobs:
 
     - name: '📦 Clone repositories to be analysed'
       run: |
-        git clone https://github.com/ghdl/ghdl
-        git clone https://github.com/ghdl/ghdl-cosim
-        git clone https://github.com/ghdl/ghdl-yosys-plugin
-        git clone https://github.com/VUnit/vunit
-        git clone https://github.com/VLSI-EDA/PoC
+        for prj in \
+          ghdl/ghdl \
+          ghdl/ghdl-cosim \
+          ghdl/ghdl-yosys-plugin \
+          VUnit/vunit VLSI-EDA/PoC \
+          antonblanchard/microwatt \
+          stnolting/NEORV32;
+        do git clone https://github.com/"$prj"; done
 
     - name: '🚧 Run pytest'
       run: pytest -n $(nproc) --template=html1/index.html --report=report.html TestDOM.py
