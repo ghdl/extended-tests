@@ -105,8 +105,6 @@ jobs:
 
     - name: '⚙️ Setup GHDL'
       uses: ghdl/setup-ghdl-ci@master
-      with:
-        backend: ${{ matrix.backend }}
 
     - name: '🐍 Setup Python'
       uses: actions/setup-python@v2
