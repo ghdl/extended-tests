@@ -22,4 +22,4 @@ def getVHDLSources():
 )
 @mark.xfail
 def test_AllVHDLSources(file):
-	check_call(['ghdl-dom', str(file)], stderr=STDOUT)
+	check_call(['ghdl-dom', 'pretty', '-f', str(file)], stderr=STDOUT)
