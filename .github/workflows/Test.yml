@@ -91,6 +91,8 @@ jobs:
       if: matrix.shell == 'psh'
       shell: pwsh
       run: verification\${{ matrix.project }}\run.ps1
+      env:
+        CC: gcc
 
 
   DOM:
