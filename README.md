@@ -4,7 +4,7 @@
   -->
   <a title="Join the chat at https://gitter.im/ghdl1/Lobby" href="https://gitter.im/ghdl1/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://img.shields.io/badge/Chat-on%20gitter-4db797.svg?longCache=true&style=flat-square&logo=gitter&logoColor=e8ecef"></a><!--
   -->
-  <a title="'Test' workflow Status" href="https://github.com/ghdl/extended-tests/actions?query=workflow%3ATest"><img alt="'Test' workflow Status" src="https://img.shields.io/github/workflow/status/ghdl/extended-tests/Test/main?longCache=true&style=flat-square&label=Test&logo=github%20actions&logoColor=fff"></a><!--
+  <a title="'Test' workflow Status" href="https://github.com/ghdl/extended-tests/actions/workflows/Test.yml"><img alt="'Test' workflow Status" src="https://img.shields.io/github/actions/workflow/status/ghdl/extended-tests/Test.yml?branch=main&longCache=true&style=flat-square&label=Test&logo=GitHubActions&logoColor=fff"></a><!--
   -->
 </p>
 
